@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ page.title | default: site.title }} | Exploring Where AI meets Crypto</title>
+  <link rel="icon" href="{{ '/images/favicon.png' | relative_url }}">
+  <meta name="description" content="{{ site.description }}">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ page.title | default: site.title }}">
+  <meta property="og:description" content="{{ site.description }}">
+  <meta property="og:url" content="{{ site.url }}{{ site.baseurl }}{{ page.url }}">
+  <meta property="og:image" content="{{ '/images/magazinepic.png' | relative_url }}">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page.title | default: site.title }}">
+  <meta name="twitter:description" content="{{ site.description }}">
+  <meta name="twitter:image" content="{{ '/images/magazinepic.png' | relative_url }}">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "{{ site.title }}",
+    "description": "{{ site.description }}",
+    "url": "{{ site.url }}{{ site.baseurl }}",
+    "logo": "{{ site.url }}{{ site.baseurl }}/images/logohorisontalblack.png",
+    "sameAs": [
+      "https://twitter.com/nearweek",
+      "https://linkedin.com/company/nearweek"
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  
+  
+  <link rel="stylesheet" href="{{ '/assets/styles.css' | relative_url }}" />
+
+  <style>
+    :root{
+      --bg: {{ site.data.theme.light.bg }};
+      --text: {{ site.data.theme.light.text }};
+      --muted: {{ site.data.theme.light.muted }};
+      --card: {{ site.data.theme.light.card }};
+      --border: {{ site.data.theme.light.border }};
+      --accent: {{ site.data.theme.light.accent }};
+      --content-bg: {{ site.data.theme.light.content-bg }};
+      --content-max-width: 1200px;
+      --content-padding: 24px;
+    }
+    html.dark{
+      --bg: {{ site.data.theme.dark.bg }};
+      --text: {{ site.data.theme.dark.text }};
+      --muted: {{ site.data.theme.dark.muted }};
+      --card: {{ site.data.theme.dark.card }};
+      --border: {{ site.data.theme.dark.border }};
+      --accent: {{ site.data.theme.dark.accent }};
+      --content-bg: {{ site.data.theme.dark.content-bg }};
+    }
+    
+</style>
+
+  <script>
+    (function(){
+      try{
+        var saved = localStorage.getItem('nw-theme') || 'light';
+        var root = document.documentElement;
+        if(saved === 'dark') root.classList.add('dark');
+        root.setAttribute('data-theme', saved);
+      }catch(e){}
+    })();
+  </script>
+</head>
+<body>
+  {% include header.html %}
+  <main>
+    {{ content }}
+  </main>
+  {% include footer.html %}
+
+  <script>
+    // Theme toggle
+    (function(){
+      function applyDot(){
+        var on = document.documentElement.classList.contains('dark');
+        var dots = document.querySelectorAll('.dot');
+        dots.forEach(function(d){ d.classList.toggle('on', on); });
+      }
+      function toggleTheme(){
+        var root = document.documentElement;
+        var dark = root.classList.toggle('dark');
+        var mode = dark ? 'dark' : 'light';
+        root.setAttribute('data-theme', mode);
+        try{ localStorage.setItem('nw-theme', mode); }catch(e){}
+        applyDot();
+      }
+      document.addEventListener('DOMContentLoaded', function(){
+        document.getElementById('theme-dot')?.addEventListener('click', toggleTheme);
+        document.getElementById('theme-dot-drawer')?.addEventListener('click', toggleTheme);
+        applyDot();
+      });
+    })();
+
+    // Drawer
+    (function(){
+      document.addEventListener('DOMContentLoaded', function(){
+        var drawer  = document.getElementById('drawer');
+        var burger  = document.getElementById('burger');
+        var closeBtn = document.getElementById('drawer-close');
+        var backdrop = drawer?.querySelector('.drawer-backdrop');
+        var links    = drawer?.querySelectorAll('.drawer-nav a') || [];
+        if (!drawer || !burger || !closeBtn || !backdrop) return;
+
+        function openDrawer(){
+          drawer.setAttribute('aria-hidden','false');
+          burger.setAttribute('aria-expanded','true');
+        }
+        function closeDrawer(){
+          drawer.setAttribute('aria-hidden','true');
+          burger.setAttribute('aria-expanded','false');
+        }
+        burger.addEventListener('click', openDrawer);
+        closeBtn.addEventListener('click', closeDrawer);
+        backdrop.addEventListener('click', closeDrawer);
+        window.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDrawer(); });
+        links.forEach(function(a){ a.addEventListener('click', closeDrawer); });
+      });
+    })();
+
+    // Marquee touch pause/resume
+    (function(){
+      document.addEventListener('DOMContentLoaded', function(){
+        var marquee = document.getElementById('cardsMarquee');
+        if(!marquee) return;
+        var track = marquee.querySelector('.cards-track');
+        if(!track) return;
+        var isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+
+        function pause(){ track.classList.add('paused'); }
+        function resume(){ track.classList.remove('paused'); }
+
+        if(isTouch){
+          marquee.addEventListener('touchstart', pause, {passive:true});
+          marquee.addEventListener('touchend', resume, {passive:true});
+          marquee.addEventListener('touchcancel', resume, {passive:true});
+        }
+        // Also pause when user focuses links via keyboard
+        marquee.addEventListener('focusin', pause);
+        marquee.addEventListener('focusout', resume);
+      });
+    })();
+
+    // ========================================
+    // MERCHANDISE 3D CAROUSEL FUNCTIONALITY
+    // ========================================
+    // Creates a 3D perspective carousel with:
+    // - Center highlighted item with full content
+    // - Side items showing only images (no text)
+    // - Touch/swipe support on mobile
+    // - Auto-rotation with manual override
+    // - Keyboard navigation (arrow keys)
+    (function(){
+      document.addEventListener('DOMContentLoaded', function(){
+        var track = document.getElementById('merchTrack');
+        if(!track) return;
+
+        var prevBtn = document.getElementById('merchPrev');
+        var nextBtn = document.getElementById('merchNext');
+        var items = track.querySelectorAll('.merch-item');
+        var currentIndex = 0;
+        var totalItems = items.length;
+        
+        // ========================================
+        // 3D CAROUSEL POSITIONING LOGIC
+        // ========================================
+        // Positions items in 3D space:
+        // - Center item: scale(1), translateZ(0) - fully visible
+        // - Side items: scale(0.7), translateZ(-100px) - background preview
+        // - Hidden items: scale(0.6), translateZ(-200px) - barely visible
+        function updateCarousel() {
+          // Check if mobile for responsive positioning
+          var isMobile = window.innerWidth <= 768;
+          
+          // Add a small delay to prevent rapid updates
+          if (updateCarousel.timeout) {
+            clearTimeout(updateCarousel.timeout);
+          }
+          
+          updateCarousel.timeout = setTimeout(function() {
+            // Temporarily disable transitions to prevent glitch
+            items.forEach(function(item) {
+              item.style.transition = 'none';
+            });
+            
+            // Position items in 3D space first to prevent glitch
+            items.forEach(function(item, index) {
+              var relativeIndex = (index - currentIndex + totalItems) % totalItems;
+              
+              if (relativeIndex === 0) {
+                // Center item (active)
+                item.style.transform = 'translateZ(0px) scale(1)';
+                item.style.zIndex = '3';
+                item.style.opacity = '1';
+              } else if (relativeIndex === 1) {
+                // Right item - opens outward
+                if (isMobile) {
+                  item.style.transform = 'translateX(180px) translateZ(-50px) rotateY(20deg) scale(0.75)';
+                  item.style.opacity = '0.7';
+                } else {
+                  item.style.transform = 'translateX(300px) translateZ(-100px) rotateY(25deg) scale(0.7)';
+                  item.style.opacity = '0.6';
+                }
+                item.style.zIndex = '2';
+              } else if (relativeIndex === totalItems - 1) {
+                // Left item - opens outward
+                if (isMobile) {
+                  item.style.transform = 'translateX(-180px) translateZ(-50px) rotateY(-20deg) scale(0.75)';
+                  item.style.opacity = '0.7';
+                } else {
+                  item.style.transform = 'translateX(-300px) translateZ(-100px) rotateY(-25deg) scale(0.7)';
+                  item.style.opacity = '0.6';
+                }
+                item.style.zIndex = '2';
+              } else {
+                // Hidden items
+                item.style.transform = 'translateZ(-200px) scale(0.6)';
+                item.style.zIndex = '1';
+                item.style.opacity = '0.3';
+              }
+            });
+            
+            // Remove active class from all items
+            items.forEach(function(item) {
+              item.classList.remove('active');
+            });
+            
+            // Set active item after positioning
+            var activeItem = items[currentIndex];
+            if (activeItem) {
+              activeItem.classList.add('active');
+            }
+            
+                 // Hide ALL content on non-active items, show only on active
+                 items.forEach(function(item, index) {
+                   var content = item.querySelector('.merch-content');
+                   var title = item.querySelector('.merch-title');
+                   var description = item.querySelector('.merch-description');
+                   var button = item.querySelector('.merch-button');
+            
+            if (index === currentIndex) {
+                     // Show all content on active item
+                     if (content) content.style.display = 'flex';
+                     if (title) title.style.display = 'block';
+                     if (description) description.style.display = 'block';
+                     if (button) button.style.display = 'inline-flex';
+                   } else {
+                     // Hide all content on non-active items
+                     if (content) content.style.display = 'none';
+                     if (title) title.style.display = 'none';
+                     if (description) description.style.display = 'none';
+                     if (button) button.style.display = 'none';
+                   }
+                 });
+            
+            // Re-enable transitions after a longer delay
+            setTimeout(function() {
+              items.forEach(function(item) {
+                item.style.transition = 'transform 0.6s ease-out, opacity 0.4s ease-out';
+                // Ensure hover effects work
+                item.addEventListener('mouseenter', function() {
+                  this.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important';
+                });
+                item.addEventListener('mouseleave', function() {
+                  this.style.transition = 'transform 0.6s ease-out, opacity 0.4s ease-out';
+                });
+              });
+            }, 150);
+          }, 50);
+        }
+        
+        function nextSlide() {
+          currentIndex = (currentIndex + 1) % totalItems;
+          // Delay to prevent glitch
+          setTimeout(updateCarousel, 20);
+        }
+        
+        function prevSlide() {
+          currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+          // Delay to prevent glitch
+          setTimeout(updateCarousel, 20);
+        }
+        
+        function nextSlideManual() {
+          onManualInteraction();
+          nextSlide();
+        }
+        
+        function prevSlideManual() {
+          onManualInteraction();
+          prevSlide();
+        }
+        
+        // Event listeners
+        if (nextBtn) nextBtn.addEventListener('click', nextSlideManual);
+        if (prevBtn) prevBtn.addEventListener('click', prevSlideManual);
+        
+        // Click on items to make them active
+        items.forEach(function(item, index) {
+          item.addEventListener('click', function() {
+            onManualInteraction();
+            currentIndex = index;
+            updateCarousel();
+          });
+        });
+        
+             // Touch functionality disabled for mobile/tablet - use arrows only
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'ArrowLeft') {
+            prevSlideManual();
+          } else if (e.key === 'ArrowRight') {
+            nextSlideManual();
+          }
+        });
+        
+        // Auto-rotate with smart pause logic
+        var autoRotate = null;
+        var autoRotateDelay = 5000;
+        var lastManualInteraction = 0;
+        var minPauseAfterManual = 3000; // 3 seconds pause after manual interaction
+        
+        function startAutoRotate() {
+          if (autoRotate) clearInterval(autoRotate);
+          autoRotate = setInterval(function() {
+            var now = Date.now();
+            // Only auto-rotate if enough time has passed since last manual interaction
+            if (now - lastManualInteraction > minPauseAfterManual) {
+              nextSlide();
+            }
+          }, autoRotateDelay);
+        }
+        
+        function stopAutoRotate() {
+          if (autoRotate) {
+            clearInterval(autoRotate);
+            autoRotate = null;
+          }
+        }
+        
+        function onManualInteraction() {
+          lastManualInteraction = Date.now();
+          stopAutoRotate();
+          // Restart auto-rotate after a delay
+          setTimeout(startAutoRotate, minPauseAfterManual);
+        }
+        
+        // Start auto-rotate initially
+        startAutoRotate();
+        
+        // Update positioning on resize
+        window.addEventListener('resize', function() {
+          updateCarousel();
+        });
+        
+        // Pause auto-rotate on hover
+        var carousel = document.querySelector('.merch-carousel');
+        if (carousel) {
+          carousel.addEventListener('mouseenter', function() {
+            stopAutoRotate();
+          });
+
+          carousel.addEventListener('mouseleave', function() {
+            startAutoRotate();
+          });
+        }
+        
+             // Initialize carousel
+             updateCarousel();
+      });
+    })();
+
+    // ========================================
+    // VIDEO THEME SWITCHING SYSTEM
+    // ========================================
+    // Handles switching between light/dark video sources:
+    // - Light mode: webpageloop2.mp4 (white video)
+    // - Dark mode: webpageloop2black.mp4 (black video)
+    // - Automatic switching on theme changes
+    // - Fallback source creation if missing
+    (function(){
+      var video = null;
+      var lightSource = null;
+      var darkSource = null;
+      
+      function initVideoSources() {
+        video = document.getElementById('themeVideo');
+        if (!video) return false;
+        
+        lightSource = video.querySelector('.light-video');
+        darkSource = video.querySelector('.dark-video');
+        
+        // Create sources if they don't exist
+        if (!lightSource) {
+          lightSource = document.createElement('source');
+          lightSource.src = '{{ "/images/webpageloop2.mp4" | relative_url }}';
+          lightSource.type = 'video/mp4';
+          lightSource.className = 'light-video';
+        }
+        
+        if (!darkSource) {
+          darkSource = document.createElement('source');
+          darkSource.src = '{{ "/images/webpageloop2black.mp4" | relative_url }}';
+          darkSource.type = 'video/mp4';
+          darkSource.className = 'dark-video';
+        }
+        
+        return true;
+      }
+      
+      function switchVideoTheme() {
+        if (!initVideoSources()) return;
+        
+        var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        
+        // Clear video sources
+        video.innerHTML = '';
+        
+        // Add the correct source
+        if (isDark) {
+          video.appendChild(darkSource);
+        } else {
+          video.appendChild(lightSource);
+        }
+        
+        // Reload video
+        video.load();
+        video.play();
+      }
+      
+      // Theme change observer
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+            switchVideoTheme();
+          }
+        });
+      });
+      
+      // Initialize
+      document.addEventListener('DOMContentLoaded', function() {
+        observer.observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ['data-theme']
+        });
+        switchVideoTheme();
+      });
+    })();
+
+    // Newsletter form handling
+    (function(){
+      document.addEventListener('DOMContentLoaded', function(){
+        const forms = document.querySelectorAll('.newsletter-form, .drawer-newsletter-form');
+        
+        forms.forEach(form => {
+          form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const button = form.querySelector('button[type="submit"]');
+            const email = form.querySelector('input[type="email"]').value;
+            
+            if (email) {
+              // Show success state
+              button.innerHTML = '✓ Subscribed';
+              button.style.background = '#22c55e';
+              button.disabled = true;
+              
+              // Reset after 3 seconds
+              setTimeout(() => {
+                button.innerHTML = 'Sign Up';
+                button.style.background = '';
+                button.disabled = false;
+              }, 3000);
+            }
+          });
+        });
+      });
+    })();
+
+  </script>
+</body>
+</html>
