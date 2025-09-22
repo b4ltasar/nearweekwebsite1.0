@@ -1,0 +1,54 @@
+---
+layout: default
+title: NEARWEEK
+---
+
+{% include hero.html %}
+
+{% include cards-marquee.html %}
+
+{% include blog-section.html %}
+
+<section class="section">
+  <div class="container">
+    <div class="hero-card">
+      <video autoplay loop muted playsinline preload="auto" class="theme-video" id="themeVideo">
+        <source src="{{ '/images/webpageloop2.mp4' | relative_url }}" type="video/mp4" class="light-video" />
+        <source src="{{ '/images/webpageloop2black.mp4' | relative_url }}" type="video/mp4" class="dark-video" />
+      </video>
+    </div>
+    <div class="cta">
+      <h2 class="big">DATA IS POWER.</h2>
+      <p class="sub">BUILD THE FUTURE YOU WANT TO PASS TO FUTURE GENERATIONS.</p>
+      <a href="https://github.com/nearweek" target="_blank" rel="noopener" class="fork-button">
+        FORK IT
+        <svg style="margin-left:8px" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+{% include feature-section.html %}
+
+<section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-content">
+      <h2 class="newsletter-title">SIGN UP FOR THE OFFICIAL NEAR NEWSLETTER</h2>
+      <p class="newsletter-subtitle">Stay ahead of the curve with exclusive insights, breaking news, and deep dives into the NEAR ecosystem</p>
+      <form class="newsletter-form">
+        <input type="email" class="newsletter-input" placeholder="Enter your email" required>
+        <button type="submit" class="newsletter-button">Sign Up</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="trenches-section">
+  <div class="container">
+    <div class="trenches-text">IN THE TRENCHES SINCE 2021</div>
+  </div>
+</section>
+
+
