@@ -1,0 +1,30 @@
+<div class="cards-marquee" id="cardsMarquee">
+  <div class="cards-track">
+    {% for card in site.data.cards.items %}
+      <div class="mcard">
+        <div class="mcard-media">
+          <img src="{{ card.image | relative_url }}" alt="{{ card.title }}">
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-title">{{ card.title }}</div>
+          <div class="mcard-text">{{ card.text }}</div>
+        </div>
+        <a href="{{ card.link }}" target="_blank" rel="noopener" class="mcard-link"></a>
+      </div>
+    {% endfor %}
+    
+    <!-- duplikér for uendelig rul -->
+    {% for card in site.data.cards.items %}
+      <div class="mcard">
+        <div class="mcard-media">
+          <img src="{{ card.image | relative_url }}" alt="{{ card.title }}">
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-title">{{ card.title }}</div>
+          <div class="mcard-text">{{ card.text }}</div>
+        </div>
+        <a href="{{ card.link }}" target="_blank" rel="noopener" class="mcard-link"></a>
+      </div>
+    {% endfor %}
+  </div>
+</div>

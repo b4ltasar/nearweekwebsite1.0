@@ -1,0 +1,36 @@
+<section class="blog-section" id="blog">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Latest from the Blog</h2>
+      <p class="section-subtitle">Stay updated with the latest insights and news</p>
+    </div>
+    
+    <div class="blog-grid">
+      {% for post in site.data.blog.posts %}
+        <article class="blog-card" data-aos="fade-up" data-aos-delay="{{ forloop.index0 | times: 100 }}">
+          <div class="blog-card-image">
+            <img src="{{ post.image | relative_url }}" alt="{{ post.title }}" loading="lazy">
+            <div class="blog-card-overlay">
+              <a href="{{ post.link }}" target="_blank" rel="noopener" class="blog-card-link">
+                Read More
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="blog-card-content">
+            <div class="blog-card-meta">
+              <span class="blog-card-date">{{ post.date | date: "%B %d, %Y" }}</span>
+              <span class="blog-card-author">{{ post.author }}</span>
+            </div>
+            <h3 class="blog-card-title">{{ post.title }}</h3>
+            <p class="blog-card-excerpt">{{ post.excerpt }}</p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+

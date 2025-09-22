@@ -1,0 +1,19 @@
+<section class="section">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="stack">
+        <h1 class="h1">{{ site.data.hero.title }}</h1>
+        <p>{{ site.data.hero.lead1 }}</p>
+        <p>{{ site.data.hero.lead2 }}</p>
+        <p>{{ site.data.hero.lead3 }}</p>
+      </div>
+      <div class="hero-card no-frame">
+        <video autoplay loop muted playsinline preload="auto" style="width:100%; height:100%; object-fit:cover;">
+          <source src="{{ site.data.hero.video | relative_url }}" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+  </div>
+</section>
+
+
