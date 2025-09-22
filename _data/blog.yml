@@ -1,0 +1,30 @@
+# Blog posts data
+# Add new blog posts here
+posts:
+  - title: "Decentralized Confidental Machine Learning"
+    excerpt: "A Business Model for User-Owned AI."
+    image: "/images/decentralizedconfidentialmachine.webp"
+    date: "2025-03-26"
+    author: "Illia Polosukhin, Alex Skidanov, Pierre Le Guen"
+    link: "https://medium.com/nearprotocol/decentralized-confidential-machine-learning-a-business-model-for-user-owned-ai-33852e9ddb0c"
+    
+  - title: "The AI Super Chain"
+    excerpt: "Why NEAR is the most ambitious project in Crypto."
+    image: "/images/theaisuperchain.jpeg"
+    date: "2025-08-19"
+    author: "Peter Humaidan"
+    link: "https://x.com/NEARWEEK/status/1912106051941302740"
+    
+  - title: "User-Owned AI is NEAR"
+    excerpt: "AI is going to fundamentally change the way we interact with computing and coordinate with each other."
+    image: "/images/userownedaiisnear.webp"
+    date: "2024-05-22"
+    author: "Illia Polosukhin"
+    link: "https://www.near.org/blog/user-owned-ai-is-near"
+    
+  - title: "DeFi Trends 2025"
+    excerpt: "What's trending in decentralized finance and how it's shaping the crypto landscape."
+    image: "/images/ten_ai_commandments.png"
+    date: "2025-01-12"
+    author: "NEARWEEK Team"
+    link: "https://nearweek.com/blog/defi-trends-2025"

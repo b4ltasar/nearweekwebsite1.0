@@ -1,0 +1,25 @@
+items:
+  - title: "CONTRIBUTE"
+    text: "Submit to the NEARWEEK Bot"
+    image: "/images/nearweekbotblack.png"
+    link:  "https://x.com/nearweekbot"
+
+  - title: "NEARCON 2026"
+    text: "Announcing NEARCON 2026: The Internet Wants to Think"
+    image: "/images/nearcon2026.webp"
+    link:  "https://www.near.org/blog/announcing-nearcon-2026-the-internet-wants-to-think"
+
+  - title: "NEAR LEGION"
+    text: "Pledge Your Allegiance - Join The Legion!"
+    image: "/images/initiatelegion.png"
+    link:  "https://nearlegion.com/"
+
+  - title: "WHAT DID YOU SHIP THIS WEEK?"
+    text: "A weekly stream to highlight the latest development on NEAR"
+    image: "/images/wdys.jpg"
+    link:  "https://youtube.com/playlist?list=PLmgxQHVg7viqjy3qOmocxs4wrtCyX0Coo&si=gsEdBzyGIDGeAaU-"
+
+  - title: "NEAR TOWN HALL"
+    text: "Every month we feature projects, highlights and insights to NEAR ecosystem"
+    image: "/images/neartownhall.jpg"
+    link:  "https://youtube.com/playlist?list=PLmgxQHVg7viopvoZg0V1Yt8fp3DEDZucF&si=30vsE5b4zw2xRI2-"

@@ -1,0 +1,25 @@
+# Feature section data
+items:
+  - title: "NEARWEEK L/S T-SHIRT"
+    description: "NEAR OG, Extremely comfortable, 100% Cotton"
+    image: "/images/nearweeklsblack.png"
+    link: ""
+    button_text: "COMING SOON"
+    
+  - title: "PLEDGE ALLEGIANCE T-SHIRT"
+    description: "Limited NW X NEAR Legion Tee"
+    image: "/images/pledgeteeblack.png"
+    link: ""
+    button_text: "COMING SOON"
+    
+  - title: "TEN AI COMMANDMENTS T-SHIRT"
+    description: "Thou must follow the holy rules of AI"
+    image: "/images/10aitee.png"
+    link: ""
+    button_text: "COMING SOON"
+    
+  - title: "DATA IS POWER MUG"
+    description: "Start your day with NEARWEEK energy"
+    image: "/images/mug.png"
+    link: ""
+    button_text: "COMING SOON"

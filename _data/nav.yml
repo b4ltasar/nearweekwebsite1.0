@@ -1,0 +1,15 @@
+# Edit menu labels and links here. Use absolute paths or full URLs.
+# logo_header: light-mode logo path; logo_footer: dark-mode logo path.
+# To add a menu item, copy a line and change text + href.
+logo_header: "/images/logohorisontalblack.png"
+logo_footer: "/images/logohorisontalwhite.png"
+
+header:
+  - { text: "NEWSLETTER", href: "https://x.com/NEARWEEK/articles" }
+  - { text: "BLOG",        href: "https://nearweek.medium.com/" }
+  - { text: "COMMUNITY",   href: "https://t.me/nearweek" }
+
+footer:
+  - { text: "NEWSLETTER", href: "https://x.com/NEARWEEK/articles" }
+  - { text: "BLOG",        href: "https://nearweek.medium.com/" }
+  - { text: "COMMUNITY",   href: "https://t.me/nearweek" }

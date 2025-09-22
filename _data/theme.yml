@@ -1,0 +1,19 @@
+# Site theme colors. Change values to update the site's look.
+# Use valid CSS color values (e.g. #RRGGBB or rgba()).
+light:
+  bg: "#ffffff"
+  text: "#0a0a0a"
+  muted: "#6b7280"
+  card: "#ffffff"
+  border: "rgba(0,0,0,0.12)"
+  accent: "#0ea5e9"
+  content-bg: "#ffffff"
+
+dark:
+  bg: "#000000"
+  text: "#f5f7fb"
+  muted: "#9ca3af"
+  card: "#12141a"
+  border: "rgba(255,255,255,0.12)"
+  accent: "#22d3ee"
+  content-bg: "linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%)"

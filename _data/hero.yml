@@ -1,0 +1,10 @@
+# Edit the homepage hero text and video here.
+# title: Main heading (keep it short)
+# lead1/2/3: Supporting lines (1-2 sentences total works best)
+# video: MP4 path relative to the site root
+title: "THE END IS NEAR"
+lead1: "NEARWEEK deliver curated news, insightful analysis, and real-time updates on the builders, projects, and innovations shaping the future of AI x Web3.
+"
+lead2: "Our mission is to connect the global NEAR community with trusted information, enabling everyone to understand, participate in, and help build the open web."
+lead3: "Stay informed. Stay early. Stay NEAR."
+video: "/images/webpageherovideo.mp4" 
