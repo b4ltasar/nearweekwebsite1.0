@@ -294,7 +294,10 @@ html[data-theme="dark"]  .drawer-panel{ background:#111; }
   .cards-marquee::-webkit-scrollbar-track { background: var(--border); }
   .cards-marquee::-webkit-scrollbar-thumb { background: var(--text); border-radius: 2px; }
 }
-@keyframes cards-marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+@keyframes cards-marquee{ 
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-50% - 8px)); }
+}
 
 /* kort */
 .mcard{
@@ -361,7 +364,10 @@ html[data-theme="dark"]  .drawer-panel{ background:#111; }
   .cards-marquee::-webkit-scrollbar-track { background: var(--border); }
   .cards-marquee::-webkit-scrollbar-thumb { background: var(--text); border-radius: 2px; }
 }
-@keyframes cards-marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+@keyframes cards-marquee{ 
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-50% - 8px)); }
+}
 
 /* kort */
 .mcard{
