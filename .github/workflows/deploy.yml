@@ -1,0 +1,57 @@
+name: Deploy Jekyll SPA on main
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: |
+          bundle config set without 'development test'
+          bundle install --jobs 4 --retry 3
+
+      - name: Build Jekyll
+        run: bundle exec jekyll build --trace
+
+      - name: Create release package
+        run: |
+          RELEASE="release_$(date +%Y%m%d_%H%M%S)"
+          echo "$RELEASE" > release_name.txt
+          tar -C "_site" -czf "${RELEASE}.tar.gz" .
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Add host to known_hosts
+        run: ssh-keyscan -p "${{ secrets.SSH_PORT }}" -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Upload release to server
+        run: |
+          RELEASE=$(cat release_name.txt)
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p "${{ secrets.SSH_PORT }}" "mkdir -p ${{ secrets.SERVER_PATH }}/releases/${RELEASE}"
+          scp -P "${{ secrets.SSH_PORT }}" "${RELEASE}.tar.gz" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/tmp/
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p "${{ secrets.SSH_PORT }}" \
+            "tar -xzf /tmp/${RELEASE}.tar.gz -C ${{ secrets.SERVER_PATH }}/releases/${RELEASE} && rm /tmp/${RELEASE}.tar.gz"
+
+      - name: Switch symlink & reload Nginx
+        run: |
+          RELEASE=$(cat release_name.txt)
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p "${{ secrets.SSH_PORT }}" "bash ${{ secrets.SERVER_PATH }}/post_deploy.sh ${RELEASE}"
