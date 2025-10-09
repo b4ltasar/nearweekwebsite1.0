@@ -5,27 +5,38 @@
       <p class="section-subtitle">Stay updated with the latest insights and news</p>
     </div>
     
-    <div class="blog-grid">
+    <!-- Loading state -->
+    <div id="blog-loading" class="blog-loading">
+      <p>Loading latest articles...</p>
+    </div>
+    
+    <!-- Error state -->
+    <div id="blog-error" class="blog-error" style="display: none;">
+      <p>Unable to load articles. Showing static content instead.</p>
+    </div>
+    
+    <!-- Dynamic blog grid (populated by JavaScript) -->
+    <div id="blog-grid" class="blog-posts" style="display: none;">
+      <!-- Articles will be loaded here via JavaScript -->
+    </div>
+    
+    <!-- Load More Button -->
+    <div id="load-more-container" class="load-more-container" style="display: none;">
+      <button id="load-more-btn" class="load-more-button">Load More</button>
+    </div>
+    
+    <!-- Fallback static content (hidden by default) -->
+    <div id="blog-fallback" class="blog-posts" style="display: none;">
       {% for post in site.data.blog.posts %}
         <article class="blog-card" data-aos="fade-up" data-aos-delay="{{ forloop.index0 | times: 100 }}">
           <div class="blog-card-image">
             <img src="{{ post.image | relative_url }}" alt="{{ post.title }}" loading="lazy">
-            <div class="blog-card-overlay">
-              <a href="{{ post.link }}" target="_blank" rel="noopener" class="blog-card-link">
-                Read More
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-            </div>
           </div>
           <div class="blog-card-content">
-            <div class="blog-card-meta">
-              <span class="blog-card-date">{{ post.date | date: "%B %d, %Y" }}</span>
-              <span class="blog-card-author">{{ post.author }}</span>
-            </div>
+            <div class="blog-card-meta">{{ post.date | date: "%B %d, %Y" }}</div>
+            <div class="blog-card-author">{{ post.author }}</div>
             <h3 class="blog-card-title">{{ post.title }}</h3>
-            <p class="blog-card-excerpt">{{ post.excerpt }}</p>
+            <a href="{{ post.link }}" target="_blank" rel="noopener" class="read-more">Read More →</a>
           </div>
         </article>
       {% endfor %}
@@ -33,4 +44,133 @@
   </div>
 </section>
 
+<script>
+// Blog API Integration with Load More
+document.addEventListener('DOMContentLoaded', function() {
+  const blogGrid = document.getElementById('blog-grid');
+  const blogLoading = document.getElementById('blog-loading');
+  const blogError = document.getElementById('blog-error');
+  const blogFallback = document.getElementById('blog-fallback');
+  const loadMoreContainer = document.getElementById('load-more-container');
+  const loadMoreBtn = document.getElementById('load-more-btn');
+  
+  let allArticles = [];
+  let currentPage = 0;
+  const articlesPerPage = 4;
+  
+  // API endpoint for articles
+  const API_ENDPOINT = 'https://nearweek.com/api/articles';
+  
+  // Function to format date
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  }
+  
+  // Function to create blog card HTML
+  function createBlogCard(article, index) {
+    return `
+      <article class="blog-card" data-aos="fade-up" data-aos-delay="${index * 100}">
+        <div class="blog-card-image">
+          <img src="${article.image || '/images/default-article.jpg'}" alt="${article.title}" loading="lazy">
+        </div>
+        <div class="blog-card-content">
+          <div class="blog-card-meta">${formatDate(article.date)}</div>
+          <div class="blog-card-author">${article.author || 'NEARWEEK'}</div>
+          <h3 class="blog-card-title">${article.title}</h3>
+          <a href="${article.link}" target="_blank" rel="noopener" class="read-more">Read More →</a>
+        </div>
+      </article>
+    `;
+  }
+  
+  // Function to display articles for current page
+  function displayArticles() {
+    const startIndex = currentPage * articlesPerPage;
+    const endIndex = startIndex + articlesPerPage;
+    const articlesToShow = allArticles.slice(0, endIndex);
+    
+    blogGrid.innerHTML = articlesToShow.map((article, index) => 
+      createBlogCard(article, index)
+    ).join('');
+    
+    // Show/hide load more button
+    if (endIndex < allArticles.length) {
+      loadMoreContainer.style.display = 'block';
+    } else {
+      loadMoreContainer.style.display = 'none';
+    }
+    
+    // Re-initialize AOS if available
+    if (typeof AOS !== 'undefined') {
+      AOS.refresh();
+    }
+  }
+  
+  // Function to load articles from API
+  async function loadArticles() {
+    try {
+      const response = await fetch(API_ENDPOINT);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // Handle both single article and array of articles
+      allArticles = Array.isArray(data) ? data : [data];
+      
+      if (allArticles.length === 0) {
+        throw new Error('No articles found');
+      }
+      
+      // Hide loading, show grid
+      blogLoading.style.display = 'none';
+      blogGrid.style.display = 'grid';
+      
+      // Display first page of articles
+      displayArticles();
+      
+    } catch (error) {
+      console.error('Error loading articles:', error);
+      
+      // Hide loading, show error, then fallback
+      blogLoading.style.display = 'none';
+      blogError.style.display = 'block';
+      
+      // After 2 seconds, show fallback content
+      setTimeout(() => {
+        blogError.style.display = 'none';
+        blogFallback.style.display = 'grid';
+      }, 2000);
+    }
+  }
+  
+  // Load more functionality
+  loadMoreBtn.addEventListener('click', function() {
+    currentPage++;
+    displayArticles();
+  });
+  
+  // Load articles when page loads
+  loadArticles();
+});
+</script>
 
+<style>
+.blog-loading, .blog-error {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.blog-loading p, .blog-error p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+</style>
